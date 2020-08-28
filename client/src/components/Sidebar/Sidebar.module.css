@@ -1,0 +1,23 @@
+.Sidebar {
+    width: 65%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-flow: column;
+    transform: translateX(-100%);
+
+    transition: all .3s ease-in-out;
+
+    z-index: 99;
+
+    background-color: #edf2ef;
+}
+
+.Show {
+    transform: translateX(0);
+}

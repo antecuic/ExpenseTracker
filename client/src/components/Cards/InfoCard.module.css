@@ -1,0 +1,31 @@
+.CardContainer {
+    width: 80%;
+    height: 25vh;
+    border-radius: 10px;
+    
+    -webkit-box-shadow: 3px 3px 5px 6px rgb(0, 0, 0);
+    -moz-box-shadow:    3px 3px 5px 6px rgb(0, 0, 0);  
+    box-shadow:         3px 3px 5px 6px rgba(0, 0, 0, 0.349);
+
+    margin-top: 2rem;
+    padding: 15px;
+
+    display: flex;
+    flex-flow: column;
+
+    background-color: #d1d646; 
+    z-index: 97;
+}
+
+@media only screen and (max-width: 350px) {
+
+    .CardContainer {
+        height: 20vh;
+    }
+
+    .CardContainer p {
+        font-weight: 400;
+        margin-top: 0.5rem;
+    }
+
+}

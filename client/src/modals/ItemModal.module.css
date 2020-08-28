@@ -1,0 +1,46 @@
+.ItemModal {
+
+    width: 85%;
+    height: 45%;
+
+    padding: 25px;
+    background-color: #edf2ef;
+    border: 1px solid black;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-1000px);
+
+    transition: all .3s ease;
+    z-index: 99;
+}
+
+.Show {
+    transform: translateY(-50%) translateX(-50%);
+}
+
+.ItemModal p {
+    margin: 10px 0;
+}
+
+.ItemModal span {
+    padding: 1px;
+    font-weight: 600;
+}
+.Buttons {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.Button {
+    margin: 15px;
+}
+
+@media only screen and (min-height: 700px) {
+    .ItemModal {
+        height: 40%;
+    }
+}
