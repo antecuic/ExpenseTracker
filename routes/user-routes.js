@@ -33,5 +33,6 @@ router.post('/changeDescription', verifyToken, [
 router.delete('/delete/:id', verifyToken, userController.delete)
 
 router.get('/getItems/:uid', verifyToken, userController.getItems)
+router.get('/getSingleItem/:id', verifyToken, userController.getSingleItem)
 
 module.exports = router;

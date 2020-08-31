@@ -376,6 +376,32 @@ const getItems = async (req, res, next) => {
     }
 }
 
+const getSingleItem = async (req, res, next) => {
+
+    jwt.verify(req.token, 'secretkey', (err) => {
+        if(err) {
+            const error = new HttpError('Unauthorized', 403)
+            return next(error);
+        }
+    }) 
+
+    const id = req.params.id
+    let item
+
+    try {
+        item = await IncomeExpense.findById(id)
+    } catch (err) {
+        const error = new HttpError('Something went wrong...', 500)
+        return next(error)
+    }
+
+    if(!item) {
+        const error = new HttpError('Nothing found...', 404)
+        return next(error)
+    }
+    res.json(item)
+}
+
 
 exports.signUp = signUp
 exports.login = login
@@ -385,3 +411,4 @@ exports.getBudget = getBudget
 exports.getUser = getUser
 exports.changeDescription = changeDescription
 exports.getItems = getItems
+exports.getSingleItem = getSingleItem

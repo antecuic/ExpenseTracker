@@ -1,30 +1,28 @@
-import React, { useEffect, useState } from 'react'
-import styles from './AddItemModal.module.css'
-import Button from '@material-ui/core/Button';
-import AddIcon from '@material-ui/icons/Add';
-import UserService from '../services/user-service'
+import React, { useState, useEffect } from 'react'
+import styles from './AddItem.module.css'
+import Button from '@material-ui/core/Button'
+import AddIcon from '@material-ui/icons/Add'
+import UserService from '../../services/user-service'
 
-const AddItemModal = ({ user, showModal, setShouldUserUpdate }) => {
+const AddItem = (props) => {
 
     const [ isDisabled, setIsDisabled ] = useState(true)
     const [ description, setDescription ] = useState('')
     const [ amount, setAmount ] = useState('')
     const [ type, setType ] = useState('income')
+    const [ userID, setUserID ] = useState(null)
 
-    let classes = [ styles.AddItemModal ]
+    useEffect(() => {
 
-    if(showModal) {
-        classes.push(styles.Show)
-    }
+        let user = localStorage.getItem('user')
+        user = JSON.parse(user)
 
-    const submitHandler = async (e) => {
-        e.preventDefault()
-        await UserService.addItem(Number(amount), description, user._id, type)
-        setDescription('')
-        setAmount('')
-        setShouldUserUpdate(true)
-        
-    }
+        if(!user){ props.history.push('/login') }
+
+        let userID = user.user._id
+        setUserID(userID)
+    }, [props.history])
+
 
     useEffect(() => {
         if(description.length >= 6 && amount > 0) {
@@ -34,8 +32,18 @@ const AddItemModal = ({ user, showModal, setShouldUserUpdate }) => {
         }
     }, [description, amount])
 
-    return (
-        <div className={classes.join(' ')}>
+    const submitHandler = async (e) => {
+        e.preventDefault()
+       
+        await UserService.addItem(Number(amount), description, userID, type)
+        
+        setDescription('')
+        setAmount('')
+        props.history.push('/')
+    }
+
+    return(
+        <div className={styles.AddItemContainer}>
             <h2>Add Item</h2>
             <form onSubmit={(e) => submitHandler(e)}>
 
@@ -61,4 +69,4 @@ const AddItemModal = ({ user, showModal, setShouldUserUpdate }) => {
 
 }
 
-export default AddItemModal
+export default AddItem

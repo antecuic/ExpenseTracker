@@ -5,6 +5,8 @@ import Login from './pages/Login/Login'
 import PrivateRoute from './routes/private-route'
 import Home from './pages/Home/Home'
 import Layout from './components/Layout/Layout'
+import AddItem from './pages/AddItem/AddItem'
+import ItemInfo from './pages/ItemInfo/ItemInfo'
 
 const App = () => {
 
@@ -15,6 +17,8 @@ const App = () => {
         <Route path="/signup" exact component={Signup}/>
         <Route path="/login" exact component={Login}/>
         <PrivateRoute path="/" exact component={Home}/>
+        <PrivateRoute path="/addItem" exac component={AddItem}/>
+        <PrivateRoute path="/itemInfo/:id" exac component={ItemInfo}/>
       </Switch>
    </Layout>
   )

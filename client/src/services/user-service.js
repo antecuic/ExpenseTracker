@@ -39,6 +39,12 @@ class UserService {
     })
   }
 
+  getSingleItem(id) {
+    return axios.get(`/api/getSingleItem/${id}`, {
+      headers: authHeader()
+    })
+  }
+
   changeDescription(description ,id) {
     return axios.post('/api/changeDescription', {
       description,

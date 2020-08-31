@@ -1,0 +1,24 @@
+.AddItemContainer {
+    width: 100%;
+    height: 100%;
+
+    background-color: #edf2ef;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+}
+
+.AddItemContainer form {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-flow: column;
+    padding: 15px;
+
+    width: 100%;
+    height: 55%;
+
+}
