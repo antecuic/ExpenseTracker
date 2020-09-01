@@ -8,7 +8,10 @@ const useStyles = makeStyles((theme) => ({
     left: '2rem',
     bottom: '1.5rem',
     position: 'absolute',
-    
+    transition: 'all .2s ease',
+    '&:hover': {
+      transform: 'scale(1.04)'
+    }
   },
 }));
 

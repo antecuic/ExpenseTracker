@@ -3,6 +3,7 @@ const IncomeExpense = require('../models/income-expense');
 const HttpError = require('../models/http-error');
 const { validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt')
 
 const getUser = async (req, res, next) => {
 
@@ -53,28 +54,36 @@ const signUp = async (req, res, next) => {
     }
 
     if(existingUser) {
-        const error = new HttpError('User already existing, please log in!', 422)
+        const error = new HttpError('User already exists, please log in!', 422)
         return next(error);
-    }
+    } 
 
-    const createdUser = new User({
-        name, 
-        email,
-        password,
-        balance: 0,
-        currency
+    bcrypt.hash(password, 10, async (err, hash) => {
+         
+        if(err) {
+            const error = new HttpError('Something went wrong!', 500)
+            return next(error)
+        }
+
+        const createdUser = new User({
+            name, 
+            email,
+            password: hash,
+            balance: 0,
+            currency
+        })
+
+        try {
+            await createdUser.save();
+            
+        } catch (error) {
+            error = new HttpError('Signing up failed, please try again', 500)
+            return next(error);
+        }
+        res.status(201).json({user: createdUser.toObject({ getters: true })})
     })
 
-    try {
-        await createdUser.save();
-        
-    } catch (error) {
-        error = new HttpError('Signing up failed, please try again', 500)
-        return next(error);
-    }
-
-
-    res.status(201).json({user: createdUser.toObject({ getters: true })})
+   
 
 }
 
@@ -91,19 +100,34 @@ const login = async (req, res, next) => {
         const error = new HttpError('Logging in failed!', 500);
         return next(error);
     }
-    if (!existingUser || existingUser.password !== password) {
+
+    if (!existingUser) {
         const error = new HttpError('Invalid credentials, could not log you in', 401)
         return next(error);
     }
 
+    bcrypt.compare(password, existingUser.password, (err, result) => {
 
-    jwt.sign({user:existingUser}, 'secretkey', (err, token) => {
-        
         if(err) {
-            const error = new HttpError('Could not log you in', 401)
+            const error = new HttpError('Something went wrong!', 500)
             return next(error)
         }
-        res.json({user: existingUser, accessToken: token})
+
+        if(result == true) {
+
+            jwt.sign({user:existingUser}, 'secretkey', (err, token) => {
+        
+                if(err) {
+                    const error = new HttpError('Unauthorized!', 401)
+                    return next(error)
+                }
+                res.json({user: existingUser, accessToken: token})
+            })
+
+        } else {
+            const error = new HttpError('Invalid password', 500)
+            return next(error)
+        }
     })
 }
 

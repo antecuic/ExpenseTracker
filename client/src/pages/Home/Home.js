@@ -8,13 +8,13 @@ import InfoCard from '../../components/Cards/InfoCard'
 import ItemCard from '../../components/Cards/Item'
 import AddIcon from '../../components/UI/AddIcon/AddIcon'
 import LogoutButton from '../../components/UI/LogoutButton/logoutButton';
-
-
+import Loader from '../../components/UI/Loader/Loader'
 
 const Home = props => {
 
     const [ user, setUser ] = useState()
     const [ userBudget, setUserBudget ] = useState([])
+    const [ isLoading, setIsLoading ] = useState(false)
 
     const handleCardClick = item => {
         props.history.push({
@@ -34,6 +34,7 @@ const Home = props => {
 
 
     useEffect(() => {
+        setIsLoading(true)
         let user = localStorage.getItem('user')
         user = JSON.parse(user)
 
@@ -46,21 +47,32 @@ const Home = props => {
         }
         
         user && fetchLoggedUser(user.user)
+        setIsLoading(false)
     }, [])
+
+    let content = <Loader/>
+
+    if(!isLoading) {
+        content = (
+            <>
+                <div className={styles.UserInfoContainer}>
+                        <InfoCard user={user}/> 
+                </div>
+                <div className={styles.ItemsContainer}>
+                    {userBudget.length > 0 && userBudget.map((item, i) => (
+                        <ItemCard key={i} item={item} user={user} clicked={() => handleCardClick(item)}/>
+                    ))}    
+                 </div>
+                <AddIcon clicked={addItemHandler}/>  
+                <LogoutButton clicked={logoutHandler}/>
+            </>
+        )
+    }
 
     return (
         <StylesProvider injectFirst>
             <Container maxWidth="sm" className={styles.Container}>
-                    <div className={styles.UserInfoContainer}>
-                        <InfoCard user={user}/> 
-                    </div>
-                    <div className={styles.ItemsContainer}>
-                        {userBudget.length > 0 && userBudget.map((item, i) => (
-                            <ItemCard key={i} item={item} user={user} clicked={() => handleCardClick(item)}/>
-                        ))}    
-                    </div>
-                    <AddIcon clicked={addItemHandler}/>  
-                    <LogoutButton clicked={logoutHandler}/>
+                    { content }
             </Container>
         </StylesProvider>
     )

@@ -10,7 +10,11 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     bottom: '2rem',
     right: '2rem',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    transition: 'all .2s ease',
+    '&:hover': {
+      transform: 'scale(1.04)'
+    }
 
   },
 }));

@@ -1,5 +1,6 @@
 import React from 'react'
 import styles from './InfoCard.module.css'
+import Loader from '../UI/Loader/Loader'
 
 const InfoCard = props => {
 
@@ -12,7 +13,7 @@ const InfoCard = props => {
     const mm = String(today.getMonth() + 1).padStart(2, '0'); 
     const yyyy = today.getFullYear();
     const day = String(today.getDay())
-    today = weekDays[day]+ ' ' + mm + '/' + dd + '/' + yyyy;
+    today = weekDays[day]+ ' ' + dd + '/' + mm + '/' + yyyy;
 
 
     if(user) {
@@ -24,12 +25,12 @@ const InfoCard = props => {
             </React.Fragment>
         )
     } else {
-        content = <p>Loading...</p>
+        content = <Loader/>
     }
 
     return (
         <div className={ styles.CardContainer }>
-        {content}
+            {content}
         </div>
     )
 }

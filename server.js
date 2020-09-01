@@ -28,7 +28,6 @@ if(process.env.NODE_ENV === 'production') {
     })
 }
 
-
 mongoose
     .connect(`mongodb+srv://${process.env.DB_CONNECTION}@cluster0.qbyvo.mongodb.net/expensetracker?retryWrites=true&w=majority`,{
         useNewUrlParser: true, 
