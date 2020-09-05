@@ -17,8 +17,8 @@ const App = () => {
         <Route path="/signup" exact component={Signup}/>
         <Route path="/login" exact component={Login}/>
         <PrivateRoute path="/" exact component={Home}/>
-        <PrivateRoute path="/addItem" exac component={AddItem}/>
-        <PrivateRoute path="/itemInfo/:id" exac component={ItemInfo}/>
+        <PrivateRoute path="/addItem" exact component={AddItem}/>
+        <PrivateRoute path="/itemInfo/:id" exact component={ItemInfo}/>
       </Switch>
    </Layout>
   )
