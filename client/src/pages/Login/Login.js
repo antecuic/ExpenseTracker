@@ -49,12 +49,19 @@ const Login = props => {
 
     const [ email, setEmail ] = useState('')
     const [ password, setPassword ] = useState('')
+    const [ isDisabled, setIsDisabled ] = useState(true)
 
     useEffect(() => {
       if(localStorage.getItem('user')) {
         props.history.push('/')
       }
     })
+
+    useEffect(() => {
+      if(password.length !== 0 && email.length !== 0) {
+        setIsDisabled(false)
+      } 
+    }, [ password, email ])
 
   const classes = useStyles();
 
@@ -80,6 +87,7 @@ const Login = props => {
             onChange={(e) => setEmail(e.target.value)}
             required
             fullWidth
+            type="email"
             id="email"
             label="Email Address"
             name="email"
@@ -101,6 +109,7 @@ const Login = props => {
           <Button
             type="submit"
             fullWidth
+            disabled = {isDisabled}
             variant="contained"
             color="primary"
             className={classes.submit}

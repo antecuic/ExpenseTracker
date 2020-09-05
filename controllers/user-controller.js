@@ -359,21 +359,6 @@ const changeDescription = async (req, res, next) => {
 
 }
 
-function sortedItems(items) {
-
-    let temp
-    for(let i = 0; i < items.length; i++) {
-        for(let j = 0; j < items.length; j++) {
-            if(items[j].date < items[i].date) {
-                temp = items[i]
-                items[i] = items[j]
-                items[j] = temp
-            }
-        }
-    }
-    return items
-}
-
 const getItems = async (req, res, next) => {
 
     jwt.verify(req.token, 'secretkey', (err) => {
@@ -396,7 +381,7 @@ const getItems = async (req, res, next) => {
     if(items.length === 0) {
         res.status(200).json({message: 'No items found'})
     } else {
-        res.status(200).json(sortedItems(items))
+        res.status(200).json(items.reverse())
     }
 }
 

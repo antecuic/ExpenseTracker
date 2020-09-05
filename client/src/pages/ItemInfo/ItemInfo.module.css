@@ -24,6 +24,10 @@
     margin: 15px;
 }
 
+.ItemInfo span {
+    font-weight: 600;
+}
+
 .ItemInfo .Buttons {
     margin: 15px;
     display: flex;

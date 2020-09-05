@@ -6,33 +6,40 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
 import UserService from '../../services/user-service'
+import Loader from '../../components/UI/Loader/Loader';
 
 const ItemInfo = (props) => {
 
-    const [ data, setData ] = useState(null)
+    const [ data, setData ] = useState()
     const [ change, setChange ] = useState(false)
     const [ descriptionValue, setDescriptionvalue ] = useState('')
     const [ updateData, setUpdateData ] = useState(false)
+    const [ isLoading, setIsLoading ] = useState(false)
 
     useEffect(() => {
+        setIsLoading(true)
         let user = localStorage.getItem('user')
         user = JSON.parse(user)
         if(!user) {props.history.push('/login')}
-        let itemId = props.history.location.state.item
+        let itemData = props.history.location.state.item
+       
+        setData(itemData)
+        setIsLoading(false)
 
-        const fetch = async (itemId) => {
-            let data = await UserService.getSingleItem(itemId)
-            setData(data.data)
-        }
-
-        itemId && fetch(itemId)
-    }, [props.history, updateData])
+    }, [props.history, data])
+    
+    const updateDescription = (value) => {
+        let newData = data
+        newData.description = value
+        setData(newData)
+    }
 
     const saveButtonHandler = async () => {
         await UserService.changeDescription(descriptionValue, data._id)
-        setDescriptionvalue('')
         setChange(false)
+        updateDescription(descriptionValue)
         setUpdateData(!updateData)
+        setDescriptionvalue('')
     }
 
     const deleteButtonHandler = async () => {
@@ -45,14 +52,14 @@ const ItemInfo = (props) => {
         setDescriptionvalue('')
     }
 
-    let content = <p>Loading...</p>
+    let content = <Loader/>
 
-    if(data) {
+    if(!isLoading && data) {
         content = (
             <div className={styles.ItemInfo}>
                 <h2 style={{marginBottom: '2rem'}}>Details</h2>
                 <p><span>Amount: </span>{data.value}</p>
-                <p><span>Date: </span>{data.date.slice(0,15)}</p>
+                <p><span>Date: </span>{data.date.slice(0, 25)}</p>
                 <p><span>Description: </span>{change ? <input type="text" minLength={6} placeholder={data.description} style={{maxWidth: '55%', height: '2rem', padding: '6px'}} onChange={e => setDescriptionvalue(e.target.value)}/> : data.description}</p>
                 <p><span>Type: </span>{data.type}</p>
                 <div className={styles.Buttons}>
@@ -65,17 +72,17 @@ const ItemInfo = (props) => {
                         >
                         Delete
                     </Button>
-                    {descriptionValue.length >= 6 ? (
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            size="medium"
-                            className={styles.Button}
-                            startIcon={<SaveIcon />}
-                            onClick={saveButtonHandler}
-                        >
-                            Save
-                        </Button>) : null}
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        size="medium"
+                        disabled={descriptionValue.length < 6}
+                        className={styles.Button}
+                        startIcon={<SaveIcon />}
+                        onClick={saveButtonHandler}
+                    >
+                        Save
+                    </Button>
                     <IconButton aria-label="edit" onClick={editModalHandler}>
                         <EditIcon />
                     </IconButton>

@@ -6,9 +6,8 @@ import UserService from '../../services/user-service'
 import AuthService from '../../services/auth-service'
 import InfoCard from '../../components/Cards/InfoCard'
 import ItemCard from '../../components/Cards/Item'
-import AddIcon from '../../components/UI/AddIcon/AddIcon'
-import LogoutButton from '../../components/UI/LogoutButton/logoutButton';
 import Loader from '../../components/UI/Loader/Loader'
+import Footer from '../../components/Footer/Footer';
 
 const Home = props => {
 
@@ -16,19 +15,22 @@ const Home = props => {
     const [ userBudget, setUserBudget ] = useState([])
     const [ isLoading, setIsLoading ] = useState(false)
 
-    const handleCardClick = item => {
+    const handleCardClick = async (item) => {
+
+        let response = await UserService.getSingleItem(item._id)
+
         props.history.push({
             pathname: '/itemInfo/'+ item._id,
-            state: { item: item._id }
+            state: { item: response.data }
         })
     }
-
+    
     const addItemHandler = () => {
         props.history.push('/addItem')
     }
 
-    const logoutHandler = async () => {
-        await AuthService.logout()
+    const logoutHandler = () => {
+        AuthService.logout()
         props.history.push("/")
     }
 
@@ -63,8 +65,8 @@ const Home = props => {
                         <ItemCard key={i} item={item} user={user} clicked={() => handleCardClick(item)}/>
                     ))}    
                  </div>
-                <AddIcon clicked={addItemHandler}/>  
-                <LogoutButton clicked={logoutHandler}/>
+                
+                <Footer addItemHandler={addItemHandler} logoutHandler={logoutHandler}/>
             </>
         )
     }

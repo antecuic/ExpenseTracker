@@ -7,9 +7,7 @@ const useStyles = makeStyles((theme) => ({
     // '& > span': {
     //   margin: theme.spacing(2),
     // },
-    position: 'absolute',
-    bottom: '2rem',
-    right: '2rem',
+    
     cursor: 'pointer',
     transition: 'all .2s ease',
     '&:hover': {
